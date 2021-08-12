@@ -188,7 +188,7 @@ label {
        margin-top: 10px;
    } 
 
-   .row {
+   .row{
        flex-direction: column;
    }
 
@@ -215,7 +215,6 @@ label {
        flex-direction: column-reverse;
        align-items: flex-start;
    }
-   /* UC7 */
    .profile-radio-content{
        flex-flow: wrap;
    }
