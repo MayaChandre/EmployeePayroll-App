@@ -1,56 +1,127 @@
 class EmployeePayrollData {
+    name;
+    gender;
+    department;
+    salary;
+    startDate;
+    notes;
 
-    //getter and setter method
-    get id() { return this._id; }
-    set id(id) {
-         this._id = id; 
-        }
-
-    get name() { return this._name; }
-    set name(name) {
-        let nameRegex = RegExp('^[A-Z][a-z A-Z \\s]{2,}$')
-        if (nameRegex.test(name))
-            this._name = name;
-        else throw 'Name is Incorrect!';
+    constructor(...params) {
+        this.name = params[0];
+        this.gender = params[1];
+        this.department = params[2];
+        this.salary = params[3];
+        this.startDate = params[4];
+        this.notes = params[5];
     }
-    get profilePic() { return this._profilePic; }
-    set profilePic(profilePic) {
-         this._profilePic = profilePic 
+
+    get getName() {
+        return this.name;
+    }
+
+    get getGender() {
+        return this.gender;
+    }
+
+    get getDepartment() {
+        return this.department;
+    }
+    
+    get getSalary() {
+        return this.salary;
+    }
+    
+    get getStartDate() {
+        return this.startDate;
+    }
+    
+    get getNotes() {
+        return this.notes;
+    }
+
+    set setName(name) {
+        let nameRegex = RegExp('^[A-Z][a-z A-Z]{2,}$');
+        if(name.match(nameRegex)){
+        this.name = name;
         }
+        else 
+        throw "Name: " + name + " is incorrect";   
+    }
 
-    get gender() { return this._gender; }
-    set gender(gender) {
-         this._gender = gender; 
-        }
+    set setDepartment(department) {
+        this.department = department;
+    }
 
-    get department() { return this._department; }
-    set department(department) {
-         this_department = department; 
-        }
+    set setSalary(salary) {
+        this.salary = salary;
+    }
 
-    get salary() { return this._salary; }
-    set salary(salary) { 
-        return this._salary = salary;
-     }
+    set setGender(gender) {
+        this.gender = gender;
+    }
 
-    get note() { return this._note; }
-    set note(note) {
-         this._note = note; 
-        }
+    set setStartDate(startDate) {
+        if(startDate == "Invalid Date")
+            throw "Date should neither be empty nor be invalid";
+        let presentDate = new Date();
+        let year = presentDate.getFullYear();
+        let month = presentDate.getMonth();
+        let date = presentDate.getDate();
+        presentDate = new Date(year, month, date);
+        let differenceInTime = presentDate.getTime() - startDate.getTime(); 
+        let differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
+        if (startDate  > presentDate)
+            throw "Start Date should not be the future date";
+        else if(differenceInDays <=30)
+            this.startDate = startDate;
+        else
+            throw "Start Date should be within 30 days of joining";
+    }
 
-    get startDate() { return this._startDate; }
-    set startDate(startDate) {
-         this._startDate = startDate 
-        }
+    set setNotes(notes) {
+          this.notes = notes;
+    }
 
-    //method
-    toString() {
+    toString() { 
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const empDate = !this.startDate ? "undefined" :
-            this.startDate.toLocalDateString("en-US", options);
-        return "id=" + this.id + ", name = '" + this.name + ", gender = '" + this.gender +
-            ", profilePic = '" + this.profilePic + ", department = " + this.department +
-            ", Salary = " + this.salary + "startDate = " + empDate + ", note = " + this.note;
+        const empDate = new Date(this.startDate).toLocaleDateString("en-US", options);
+        return " Name: " + this.name + "\n Gender: " + this.gender + "\n Department: " + this.department + "\n Salary: " + this.salary + "\n Start Date: " + empDate + "\n Notes: " + this.notes;
+    }
+}
 
+const salary = document.querySelector('#salary');
+const salaryOutput = document.querySelector('.salary-output');
+salaryOutput.textContent = salary.value;
+salary.oninput = function() {
+    salaryOutput.textContent = salary.value;
+};
+
+function save() {
+    try {
+        let name = document.querySelector('#name').value;
+        let gender = document.querySelector('input[name=gender]:checked').value;
+        let deptList = new Array();
+        let departments = document.querySelectorAll('input[name=department]:checked');
+        if(departments.length == 0)
+            throw "Select at least one department"
+        for (let i = 0; i < departments.length; i++) {
+            deptList.push(departments[i].value);
+        }
+        let salary = document.querySelector('#salary').value;
+        let year = document.querySelector('#year').value;
+        let month = document.querySelector('#month').value;
+        let day = document.querySelector('#day').value;
+        let startDate = new Date(year, month-1, day);
+        let notes = document.querySelector('#notes').value;
+        let newEmployee = new EmployeePayrollData();
+        newEmployee.setName = name;
+        newEmployee.setGender = gender;
+        newEmployee.setDepartment = deptList;
+        newEmployee.setSalary = salary;
+        newEmployee.setStartDate = startDate;
+        newEmployee.setNotes = notes;
+        alert(newEmployee);
+    } catch (error) {
+        alert(error);
     }
 }
