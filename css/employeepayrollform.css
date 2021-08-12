@@ -215,6 +215,7 @@ label {
        flex-direction: column-reverse;
        align-items: flex-start;
    }
+   /* UC7 */
    .profile-radio-content{
        flex-flow: wrap;
    }
